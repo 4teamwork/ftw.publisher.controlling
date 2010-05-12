@@ -25,6 +25,7 @@ setup(name='ftw.publisher.controlling',
       zip_safe=False,
       install_requires=[
         'setuptools',
+        'ftw.table',
         # -*- Extra requirements: -*-
         ],
       entry_points="""

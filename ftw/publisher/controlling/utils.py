@@ -20,3 +20,20 @@ def persistent_aware(item):
             newitem.append(persistent_aware(value))
         return newitem
     return item
+
+
+def unpersist(item):
+    """ Converts persistent dicts and lists to normal dicts and lists
+    and makes a copy.
+    """
+    if isinstance(item, PersistentDict) or isinstance(item, dict):
+        newitem = dict()
+        for key, value in item.items():
+            newitem[key] = unpersist(value)
+        return newitem
+    elif isinstance(item, list) or isinstance(item, tuple) or isinstance(item, PersistentList):
+        newitem = []
+        for value in item:
+            newitem.append(unpersist(value))
+        return newitem
+    return item

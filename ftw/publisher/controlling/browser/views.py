@@ -4,6 +4,8 @@ from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from ftw.publisher.controlling import _
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
+from ftw.table.interfaces import ITableGenerator
+from zope.component import getUtility
 
 
 class ControllingView(BrowserView):
@@ -47,6 +49,12 @@ class BaseStatistic(BrowserView):
     """ Super class for statistics views
     """
 
+    def columns(self):
+        return NotImplementedError
+
+    def get_title(self):
+        return NotImplementedError
+
     def get_elements_for_cache(self):
         """ Calculates the elements for the cache. This method
         is called while the cache is refreshed.
@@ -55,13 +63,24 @@ class BaseStatistic(BrowserView):
         """
         raise NotImplementedError
 
-    def get_elements(self):
+    def prepare_elements(self, elements):
+        """ Used for updating the elements for rendering
+        """
+        return elements        
+
+    def _get_elements(self):
         """ Returns the cached elements. Returns
         an empty list if there are no elements cached yet.
         """
         portal = self.context.portal_url.getPortalObject()
         controller = IStatisticsCacheController(portal)
         return controller.get_elements_for(self.__name__, [])
+
+    def render(self):
+        elements = self.prepare_elements(self._get_elements())
+        generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
+        return generator.generate(elements, self.columns())
+
 
 
 class BrokenPublications(BaseStatistic):
@@ -71,3 +90,36 @@ class BrokenPublications(BaseStatistic):
     - not existing on the public system
     """
 
+    types = ['OrgUnit']
+    states = ['published_internet']
+
+    def get_elements_for_cache(self):
+        query = {
+            'portal_type': self.types,
+            'review_state': self.states,
+            }
+        for brain in self.context.portal_catalog(query):
+            yield {
+                'Title': brain.Title,
+                'path': brain.getPath(),
+                'review_state': brain.review_state,
+                'workflow_name': brain.workflow_name,
+                }
+
+    def get_title(self):
+        return _(u'label_broken_publications',
+                 default=u'Broken Publications')
+
+    def columns(self):
+        return ('Title',
+                'review_state',
+                'workflow_name',
+                )
+
+    def prepare_elements(self, elements):
+        for elm in elements:
+            elm['Title'] = '<a href="%s">%s</a>' % (
+                elm['path'],
+                elm['Title'],
+                )
+        return elements

@@ -1,17 +1,34 @@
-<fieldset>
-  <legend i18n:translate="legend_refresh_statistics">Refresh Statistics</legend>
-  <p i18n:translate="text_refresh">
-    The statistics are cached for fast access. It is will not refresh
-    automatically, so you need to push the button below for refreshing
-    it.
-  </p>
-  <input type="button" id="refresh_statistics" value="Refresh Statistics"
-         i18n:attributes="value button_refresh_statistics" />
-</fieldset>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/prefs_main_template/macros/master"
+      i18n:domain="ftw.publisher.controlling">
 
-<fieldset>
-  <legend i18n:translate="legend_statistics">Statistics</legend>
-  <ul>
-    <li>Hanspeter</li>
-  </ul>
-</fieldset>
+  <body>
+
+    <div metal:fill-slot="prefs_configlet_content">
+      <div class="documentContent" id="content" class="controlling-view">
+
+        <div metal:use-macro="here/global_statusmessage/macros/portal_message">
+          Portal status message
+        </div>
+
+        <h1 class="documentFirstHeading"
+            tal:content="view/get_title">TITLE</h1>
+
+        <a href=""
+           class="link-parent"
+           tal:attributes="href string:$portal_url/@@publisher-controlling"
+           i18n:translate="label_up_to_publishment_controlling">
+          Up to publishment controlling overview
+        </a>
+
+        <tal:RENDER tal:replace="structure view/render" />
+
+      </div>
+    </div>
+
+  </body>
+</html>

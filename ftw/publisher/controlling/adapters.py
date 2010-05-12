@@ -2,7 +2,7 @@ from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
-from ftw.publisher.controlling.utils import persistent_aware
+from ftw.publisher.controlling.utils import persistent_aware, unpersist
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
 
@@ -25,7 +25,7 @@ class StatisticsCacheController(object):
         is registered in portal_actions
         """
         for view in self._list_statistics_views():
-            elements = view.get_elements_for_cache()
+            elements = list(view.get_elements_for_cache())
             self._store_elements_for(view.__name__, elements)
         self._increment_cache_version()
         self._set_last_update_date()
@@ -42,12 +42,16 @@ class StatisticsCacheController(object):
         """
         return self.annotations[ANNOTATIONS_DATE_KEY]
 
-    def get_elements_for(self, view_name, default=None):
+    def get_elements_for(self, view_name, default=None,
+                         unpersist_data=True):
         """ Returns the cached elements for a view (registered
         in portal_actions)
         """
         key = ANNOTATIONS_PREFIX + view_name
-        return self.annotations.get(key, default)
+        data = self.annotations.get(key, default)
+        if unpersist_data:
+            data = unpersist(data)
+        return data
 
     def _list_statistics_views(self):
         """ Returns a generator of views which are statistic views
