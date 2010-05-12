@@ -11,4 +11,10 @@
   <include package=".browser" />
   <include file="profiles.zcml" />
 
+  <adapter
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      provides="ftw.publisher.controlling.interfaces.IStatisticsCacheController"
+      factory="ftw.publisher.controlling.adapters.StatisticsCacheController"
+      name="" />
+
 </configure>

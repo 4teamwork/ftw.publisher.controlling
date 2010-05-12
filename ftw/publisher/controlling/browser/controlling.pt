@@ -9,7 +9,7 @@
   <body>
 
     <div metal:fill-slot="prefs_configlet_content">
-      <div class="documentContent" id="content">
+      <div class="documentContent" id="content" class="controlling-view">
 
         <div metal:use-macro="here/global_statusmessage/macros/portal_message">
           Portal status message
@@ -25,9 +25,38 @@
           Up to Site Setup
         </a>
 
-        <p>
-          Hans peter
-        </p>
+        <fieldset>
+          <legend i18n:translate="legend_refresh_statistics">Refresh Statistics</legend>
+          <p i18n:translate="text_refresh">
+            The statistics are cached for fast access. It is will not refresh
+            automatically, so you need to push the button below for refreshing
+            it.
+          </p>
+          <a href="./@@publisher-controlling-refresh-statistics" id="refresh_statistics"
+             i18n:translate="button_refresh_statistics">Refresh Statistics</a>
+        </fieldset>
+
+        <fieldset>
+          <legend i18n:translate="legend_statistics">Statistics</legend>
+
+          <dl class="actionItems"
+              id="content-views"
+              i18n:domain="plone">
+
+            <tal:views repeat="action view/get_actions">
+              <dt tal:attributes="id string:action/id">
+                <a href=""
+                   tal:content="action/title"
+                   tal:attributes="href action/url;">
+                  View name
+                </a>
+              </dt>
+              <dd tal:content="action/description"
+                  tal:condition="action/description" />
+            </tal:views>
+
+          </dl>
+        </fieldset>
 
       </div>
     </div>

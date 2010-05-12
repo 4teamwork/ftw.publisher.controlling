@@ -1,0 +1,17 @@
+<fieldset>
+  <legend i18n:translate="legend_refresh_statistics">Refresh Statistics</legend>
+  <p i18n:translate="text_refresh">
+    The statistics are cached for fast access. It is will not refresh
+    automatically, so you need to push the button below for refreshing
+    it.
+  </p>
+  <input type="button" id="refresh_statistics" value="Refresh Statistics"
+         i18n:attributes="value button_refresh_statistics" />
+</fieldset>
+
+<fieldset>
+  <legend i18n:translate="legend_statistics">Statistics</legend>
+  <ul>
+    <li>Hanspeter</li>
+  </ul>
+</fieldset>

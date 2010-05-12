@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+        xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+
+  <object name="publisher_controlling_actions" meta_type="CMF Action Category">
+    <property name="title">Publisher controlling actions</property>
+
+    <object name="broken-publications" meta_type="CMF Action" i18n:domain="ftw.publisher.controlling">
+      <property name="title" i18n:translate="">Broken publications</property>
+      <property name="description"
+                i18n:translate="">Shows all objects wich have a published-state but do not exist at the remote site.</property>
+      <property name="url_expr">string:$portal_url/@@publisher-controlling-broken-publications</property>
+      <property name="available_expr"></property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+</object>
+
