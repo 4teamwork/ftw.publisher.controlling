@@ -26,6 +26,26 @@
         </a>
 
         <fieldset>
+          <legend i18n:translate="legend_select_realm">Select Realm</legend>
+          <p i18n:translate="text_select_realm">
+            Select the realm to perform the statistics on. Every realm has its own
+            statistics cache.
+          </p>
+          <form action="./@@publisher-controlling">
+            <select name="realm">
+              <tal:realms repeat="opt view/get_realm_options">
+                <option tal:content="opt/label"
+                        tal:attributes="value opt/id;
+                                        selected opt/selected" />
+              </tal:realms>
+            </select>
+            <input type="submit" name="form.selectrealm.submitted"
+                   value="Select Realm"
+                   i18n:attributes="value label_select_realm" />
+          </form>
+        </fieldset>
+
+        <fieldset>
           <legend i18n:translate="legend_refresh_statistics">Refresh Statistics</legend>
           <p i18n:translate="text_refresh">
             The statistics are cached for fast access. It is will not refresh

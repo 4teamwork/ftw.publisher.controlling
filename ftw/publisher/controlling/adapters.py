@@ -3,9 +3,13 @@ from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
 from ftw.publisher.controlling.utils import persistent_aware, unpersist
+from ftw.publisher.sender.interfaces import IConfig
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
 
+# annotations key on portal
+ANNOTATIONS_CURRENT_REALM = 'publisher-controlling-current-realm'
+# annotations key on realm
 ANNOTATIONS_PREFIX = 'publisher-controlling-statistic-'
 ANNOTATIONS_VERSION_KEY = 'publisher-controlling-version'
 ANNOTATIONS_DATE_KEY = 'publisher-controlling-last-update'
@@ -18,7 +22,8 @@ class StatisticsCacheController(object):
         context = aq_inner(context)
         self.context = context
         self.portal = context.portal_url.getPortalObject()
-        self.annotations = IAnnotations(self.portal)
+        self.portal_annotations = IAnnotations(self.portal)
+        self.realm_annotations = IAnnotations(self.get_current_relam())
 
     def rebuild_cache(self):
         """ Rebuilds the cache for each statistics view which
@@ -34,13 +39,13 @@ class StatisticsCacheController(object):
         """ The cache version is incremented after every successful
         update of the cache.
         """
-        return int(self.annotations.get(ANNOTATIONS_VERSION_KEY, 0))
+        return int(self.realm_annotations.get(ANNOTATIONS_VERSION_KEY, 0))
 
     def last_updated(self):
         """ Returns a datetime when the last successfull cache
         update happened.
         """
-        return self.annotations[ANNOTATIONS_DATE_KEY]
+        return self.realm_annotations[ANNOTATIONS_DATE_KEY]
 
     def get_elements_for(self, view_name, default=None,
                          unpersist_data=True):
@@ -48,10 +53,29 @@ class StatisticsCacheController(object):
         in portal_actions)
         """
         key = ANNOTATIONS_PREFIX + view_name
-        data = self.annotations.get(key, default)
+        data = self.realm_annotations.get(key, default)
         if unpersist_data:
             data = unpersist(data)
         return data
+
+    def get_current_relam(self):
+        """ Returns the currently select realm object
+        """
+        realm = self.portal_annotations.get(ANNOTATIONS_CURRENT_REALM, None)
+        if realm:
+            return realm
+        else:
+            for realm in IConfig(self.portal).getRealms():
+                if realm.active:
+                    self.set_current_realm(realm)
+                    return realm
+        return None
+
+    def set_current_realm(self, realm):
+        """ Sets the current realm (realm object)
+        """
+        self.portal_annotations[ANNOTATIONS_CURRENT_REALM] = realm
+
 
     def _list_statistics_views(self):
         """ Returns a generator of views which are statistic views
@@ -74,17 +98,17 @@ class StatisticsCacheController(object):
         """
         key = ANNOTATIONS_PREFIX + view_name
         data = persistent_aware(elements)
-        self.annotations[key] = data
+        self.realm_annotations[key] = data
 
     def _increment_cache_version(self):
         """ Increments the cache version
         """
         version = int(self.get_cache_version())
         version += 1
-        self.annotations[ANNOTATIONS_VERSION_KEY] = version
+        self.realm_annotations[ANNOTATIONS_VERSION_KEY] = version
 
     def _set_last_update_date(self):
         """ Sets the "last_updated" information to now
         """
-        self.annotations[ANNOTATIONS_DATE_KEY] = datetime.now()
+        self.realm_annotations[ANNOTATIONS_DATE_KEY] = datetime.now()
 

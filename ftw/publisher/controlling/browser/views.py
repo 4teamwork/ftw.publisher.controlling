@@ -1,4 +1,6 @@
+from ftw.publisher.sender.interfaces import IConfig
 from Acquisition import aq_inner
+import md5
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
@@ -11,6 +13,19 @@ from zope.component import getUtility
 class ControllingView(BrowserView):
     """ Default publishment controlling view
     """
+
+    def __call__(self):
+        if self.request.get('form.selectrealm.submitted'):
+            portal = self.context.portal_url.getPortalObject()
+            controller = IStatisticsCacheController(portal)
+            realm = self.get_realm_by_id(self.request.get('realm'))
+            if not realm:
+                raise Exception('Realm not found')
+            controller.set_current_realm(realm)
+            msg = _(u'info_selected_realm',
+                    default=u'Realm selected')
+            IStatusMessage(self.request).addStatusMessage(msg, type='info')
+        return super(ControllingView, self).__call__()
 
     def get_actions(self):
         actions_tool = getToolByName(aq_inner(self.context), 'portal_actions')
@@ -28,6 +43,30 @@ class ControllingView(BrowserView):
                        'id': action['id'],
                        'class': cssClass,
                        }
+
+    def get_realm_options(self):
+        portal = self.context.portal_url.getPortalObject()
+        config = IConfig(portal)
+        controller = IStatisticsCacheController(portal)
+        current_realm = controller.get_current_relam()
+        for realm in config.getRealms():
+            if realm.active:
+                label = '%s : %s' % (realm.url, realm.username)
+                yield {'id': self.make_realm_id(realm),
+                       'label': label,
+                       'selected': current_realm==realm,
+                       }
+
+    def make_realm_id(self, realm):
+        return md5.md5('%s-%s' % (realm.url, realm.username)).hexdigest()
+
+    def get_realm_by_id(self, id):
+        config = IConfig(self.context.portal_url.getPortalObject())
+        for realm in config.getRealms():
+            if self.make_realm_id(realm)==id:
+                return realm
+        return None
+
 
 
 class RefreshStatistics(BrowserView):
@@ -55,18 +94,19 @@ class BaseStatistic(BrowserView):
     def get_title(self):
         return NotImplementedError
 
-    def get_elements_for_cache(self):
+    def get_elements_for_cache(self, controller):
         """ Calculates the elements for the cache. This method
         is called while the cache is refreshed.
         The result should only contain simple type objects such
         as string, list, dict, int etc.
+        Use controller.get_remote_objects for getting remote objects
         """
         raise NotImplementedError
 
     def prepare_elements(self, elements):
         """ Used for updating the elements for rendering
         """
-        return elements        
+        return elements
 
     def _get_elements(self):
         """ Returns the cached elements. Returns
@@ -100,7 +140,7 @@ class BrokenPublications(BaseStatistic):
             }
         for brain in self.context.portal_catalog(query):
             yield {
-                'Title': brain.Title,
+                'Title': brain.Title + '- 2',
                 'path': brain.getPath(),
                 'review_state': brain.review_state,
                 'workflow_name': brain.workflow_name,
