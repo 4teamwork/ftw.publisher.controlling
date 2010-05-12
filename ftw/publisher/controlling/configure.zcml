@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="ftw.publisher.controlling">
+
+  <!-- Include configuration for dependencies listed in setup.py -->
+  <include package="z3c.autoinclude" file="meta.zcml" />
+  <includeDependencies package="." />
+
+  <include package=".browser" />
+  <include file="profiles.zcml" />
+
+</configure>

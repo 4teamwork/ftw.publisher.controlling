@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="ftw.publisher.controlling">
+
+  <browser:page
+      name="publisher-controlling"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".views.ControllingView"
+      template="controlling.pt"
+      permission="cmf.ManagePortal"
+      />
+
+</configure>
