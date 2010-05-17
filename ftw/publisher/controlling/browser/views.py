@@ -1,6 +1,4 @@
-from ftw.publisher.sender.interfaces import IConfig
 from Acquisition import aq_inner
-import md5
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
@@ -8,6 +6,14 @@ from ftw.publisher.controlling import _
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
 from ftw.table.interfaces import ITableGenerator
 from zope.component import getUtility
+import md5
+
+try:
+    from ftw.publisher.sender.interfaces import IConfig
+except ImportError:
+    SENDER_INSTALLED = False
+else:
+    SENDER_INSTALLED = True
 
 
 class ControllingView(BrowserView):
@@ -67,6 +73,10 @@ class ControllingView(BrowserView):
                 return realm
         return None
 
+    def last_updated(self):
+        portal = self.context.portal_url.getPortalObject()
+        controller = IStatisticsCacheController(portal)
+        return controller.last_updated()
 
 
 class RefreshStatistics(BrowserView):
