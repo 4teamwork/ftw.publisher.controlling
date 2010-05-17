@@ -147,7 +147,6 @@ class BrokenPublications(BaseStatistic):
             return None
         data = props.getProperty('controlling_brokenpublications_query', None)
         if data:
-            print (data.strip(),)
             return simplejson.loads(data.strip())
         else:
             return {}
@@ -182,3 +181,54 @@ class BrokenPublications(BaseStatistic):
                 elm['Title'],
                 )
         return elements
+
+
+class UnpublishedVisibles(BaseStatistic):
+    """ Show a list of all objects wich are:
+    - existing on the editing system but not in a public state
+    - existing on the public system
+    """
+
+
+    def local_query(self):
+        props = self.context.portal_properties.get('publisher_properties', None)
+        if not props:
+            return None
+        data = props.getProperty('controlling_unpublishedvisibles_query', None)
+        if data:
+            return simplejson.loads(data.strip())
+        else:
+            return {}
+
+    def get_elements_for_cache(self, controller):
+        ro_path = controller.remote_objects_by_path()
+        for brain in self.context.portal_catalog(self.local_query()):
+            if brain.getPath() in ro_path.keys() and \
+                    ro_path[brain.getPath()]['review_state'] != brain.review_state:
+                yield {
+                    'Title': brain.Title,
+                    'path': brain.getPath(),
+                    'review_state': brain.review_state,
+                    'workflow_name': brain.workflow_name,
+                    'portal_type' : brain.portal_type,
+                    }
+
+    def get_title(self):
+        return _(u'label_unpublished_visibles',
+                 default=u'Unpublished visibles')
+
+    def columns(self):
+        return ('Title',
+                'portal_type',
+                'review_state',
+                'workflow_name',
+                )
+
+    def prepare_elements(self, elements):
+        for elm in elements:
+            elm['Title'] = '<a href="%s">%s</a>' % (
+                elm['path'],
+                elm['Title'],
+                )
+        return elements
+

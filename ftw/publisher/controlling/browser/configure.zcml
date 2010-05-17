@@ -38,4 +38,12 @@
       permission="cmf.ManagePortal"
       />
 
+  <browser:page
+      name="publisher-controlling-unpublished-visibles"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".views.UnpublishedVisibles"
+      template="element-listing.pt"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>

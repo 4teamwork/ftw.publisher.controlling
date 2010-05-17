@@ -17,6 +17,18 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="unpublished-visibles" meta_type="CMF Action" i18n:domain="ftw.publisher.controlling">
+      <property name="title" i18n:translate="">Unpublished visibles</property>
+      <property name="description"
+                i18n:translate="">Show all objects wich are not published (on the editing system) but are existing on the public system.</property>
+      <property name="url_expr">string:$portal_url/@@publisher-controlling-unpublished-visibles</property>
+      <property name="available_expr"></property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
 </object>

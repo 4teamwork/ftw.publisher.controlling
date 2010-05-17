@@ -8,6 +8,10 @@
       {"review_state": ["published"]}
     </property>
 
+    <property name="controlling_unpublishedvisibles_query" type="text">
+      {"review_state": ["private", "pending", "visible"]}
+    </property>
+
   </object>
 
 </object>
