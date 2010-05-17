@@ -31,7 +31,7 @@
             Select the realm to perform the statistics on. Every realm has its own
             statistics cache.
           </p>
-          <form action="./@@publisher-controlling">
+          <form action="./@@publisher-controlling" method="POST">
             <select name="realm">
               <tal:realms repeat="opt view/get_realm_options">
                 <option tal:content="opt/label"
@@ -51,6 +51,10 @@
             The statistics are cached for fast access. It is will not refresh
             automatically, so you need to push the button below for refreshing
             it.
+          </p>
+          <p i18n:translate="last_refresh">
+            Last update:
+            <span i18n:name="date" tal:replace="view/last_updated" />
           </p>
           <a href="./@@publisher-controlling-refresh-statistics" id="refresh_statistics"
              i18n:translate="button_refresh_statistics">Refresh Statistics</a>

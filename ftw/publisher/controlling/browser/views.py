@@ -7,6 +7,7 @@ from ftw.publisher.controlling.interfaces import IStatisticsCacheController
 from ftw.table.interfaces import ITableGenerator
 from zope.component import getUtility
 import md5
+import simplejson
 
 try:
     from ftw.publisher.sender.interfaces import IConfig
@@ -54,7 +55,7 @@ class ControllingView(BrowserView):
         portal = self.context.portal_url.getPortalObject()
         config = IConfig(portal)
         controller = IStatisticsCacheController(portal)
-        current_realm = controller.get_current_relam()
+        current_realm = controller.get_current_realm()
         for realm in config.getRealms():
             if realm.active:
                 label = '%s : %s' % (realm.url, realm.username)
@@ -140,21 +141,28 @@ class BrokenPublications(BaseStatistic):
     - not existing on the public system
     """
 
-    types = ['OrgUnit']
-    states = ['published_internet']
+    def local_query(self):
+        props = self.context.portal_properties.get('publisher_properties', None)
+        if not props:
+            return None
+        data = props.getProperty('controlling_brokenpublications_query', None)
+        if data:
+            print (data.strip(),)
+            return simplejson.loads(data.strip())
+        else:
+            return {}
 
-    def get_elements_for_cache(self):
-        query = {
-            'portal_type': self.types,
-            'review_state': self.states,
-            }
-        for brain in self.context.portal_catalog(query):
-            yield {
-                'Title': brain.Title + '- 2',
-                'path': brain.getPath(),
-                'review_state': brain.review_state,
-                'workflow_name': brain.workflow_name,
-                }
+    def get_elements_for_cache(self, controller):
+        ro_path = controller.remote_objects_by_path()
+        for brain in self.context.portal_catalog(self.local_query()):
+            if brain.getPath() not in ro_path.keys():
+                yield {
+                    'Title': brain.Title,
+                    'path': brain.getPath(),
+                    'review_state': brain.review_state,
+                    'workflow_name': brain.workflow_name,
+                    'portal_type' : brain.portal_type,
+                    }
 
     def get_title(self):
         return _(u'label_broken_publications',
@@ -162,6 +170,7 @@ class BrokenPublications(BaseStatistic):
 
     def columns(self):
         return ('Title',
+                'portal_type',
                 'review_state',
                 'workflow_name',
                 )

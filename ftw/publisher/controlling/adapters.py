@@ -3,8 +3,10 @@ from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
 from ftw.publisher.controlling.utils import persistent_aware, unpersist
+from plone.memoize import instance
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
+import simplejson
 
 try:
     from ftw.publisher.sender.interfaces import IConfig
@@ -12,6 +14,9 @@ except ImportError:
     SENDER_INSTALLED = False
 else:
     SENDER_INSTALLED = True
+
+if SENDER_INSTALLED:
+    from ftw.publisher.sender.utils import sendRequestToRealm
 
 
 # annotations key on portal
@@ -30,14 +35,14 @@ class StatisticsCacheController(object):
         self.context = context
         self.portal = context.portal_url.getPortalObject()
         self.portal_annotations = IAnnotations(self.portal)
-        self.realm_annotations = IAnnotations(self.get_current_relam())
+        self.realm_annotations = IAnnotations(self.get_current_realm())
 
     def rebuild_cache(self):
         """ Rebuilds the cache for each statistics view which
         is registered in portal_actions
         """
         for view in self._list_statistics_views():
-            elements = list(view.get_elements_for_cache())
+            elements = list(view.get_elements_for_cache(self))
             self._store_elements_for(view.__name__, elements)
         self._increment_cache_version()
         self._set_last_update_date()
@@ -65,7 +70,7 @@ class StatisticsCacheController(object):
             data = unpersist(data)
         return data
 
-    def get_current_relam(self):
+    def get_current_realm(self):
         """ Returns the currently select realm object
         """
         realm = self.portal_annotations.get(ANNOTATIONS_CURRENT_REALM, None)
@@ -83,12 +88,20 @@ class StatisticsCacheController(object):
         """
         self.portal_annotations[ANNOTATIONS_CURRENT_REALM] = realm
 
+    @instance.memoize
     def get_remote_objects(self):
         """ Returns a list of remote objects (as dicts) with some basic
         information.
         """
-        # XXX
-        pass
+        data = sendRequestToRealm({}, self.get_current_realm(),
+                                  '@@publisher-controlling-json-remote-object')
+        return simplejson.loads(data)
+
+    @instance.memoize
+    def remote_objects_by_path(self):
+        """ Returns a dict of remote objects with the path as key
+        """
+        return dict([(elm['getPath'], elm) for elm in self.get_remote_objects()])
 
     def _list_statistics_views(self):
         """ Returns a generator of views which are statistic views

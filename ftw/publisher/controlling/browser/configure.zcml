@@ -24,6 +24,13 @@
       />
 
   <browser:page
+      name="publisher-controlling-json-remote-object"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".jsonviews.ListRemoteObjects"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
       name="publisher-controlling-broken-publications"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       class=".views.BrokenPublications"
