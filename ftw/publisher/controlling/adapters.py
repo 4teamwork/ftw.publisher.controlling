@@ -3,9 +3,16 @@ from Products.CMFCore.utils import getToolByName
 from datetime import datetime
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
 from ftw.publisher.controlling.utils import persistent_aware, unpersist
-from ftw.publisher.sender.interfaces import IConfig
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
+
+try:
+    from ftw.publisher.sender.interfaces import IConfig
+except ImportError:
+    SENDER_INSTALLED = False
+else:
+    SENDER_INSTALLED = True
+
 
 # annotations key on portal
 ANNOTATIONS_CURRENT_REALM = 'publisher-controlling-current-realm'
@@ -76,6 +83,12 @@ class StatisticsCacheController(object):
         """
         self.portal_annotations[ANNOTATIONS_CURRENT_REALM] = realm
 
+    def get_remote_objects(self):
+        """ Returns a list of remote objects (as dicts) with some basic
+        information.
+        """
+        # XXX
+        pass
 
     def _list_statistics_views(self):
         """ Returns a generator of views which are statistic views
