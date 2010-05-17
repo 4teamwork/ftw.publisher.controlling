@@ -103,6 +103,29 @@ class StatisticsCacheController(object):
         """
         return dict([(elm['path'], elm) for elm in self.get_remote_objects()])
 
+    def get_remote_item(self, obj=None, brain=None, path=None):
+        """ Returns the remote item as dict (if existing) or None.
+        Provide either the local obj, the local brain or the local
+        path relative to the plone site.
+        """
+        if not obj and not brain and not path:
+            raise ValueError('Provide either obj, brain or path')
+        portal = self.context.portal_url.getPortalObject()
+        if obj or brain:
+            if not getattr(self, '_portal_path', None):
+                self._portal_path = '/'.join(portal.getPhysicalPath()) + '/'
+            if obj:
+                fullpath = '/'.join(obj.getPhysicalPath())
+            elif brain:
+                fullpath = brain.getPath()
+            if not fullpath.startswith(self._portal_path):
+                raise Exception('Cannot get remote item: %s does not start with %s' % (
+                        `fullpath`,
+                        `self._portal_path`,
+                        ))
+            path = fullpath[len(self._portal_path):]
+        return self.remote_objects_by_path().get(path, None)
+
     def _list_statistics_views(self):
         """ Returns a generator of views which are statistic views
         """

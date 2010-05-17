@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
 from ftw.publisher.controlling import _
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
@@ -99,6 +100,11 @@ class BaseStatistic(BrowserView):
     """ Super class for statistics views
     """
 
+    template = ViewPageTemplateFile('element-listing.pt')
+
+    def __call__(self):
+        return self.template()
+
     def columns(self):
         return NotImplementedError
 
@@ -118,31 +124,6 @@ class BaseStatistic(BrowserView):
         """ Used for updating the elements for rendering
         """
         return elements
-
-    def get_remote_item(self, obj=None, brain=None, path=None):
-        """ Returns the remote item as dict (if existing) or None.
-        Provide either the local obj, the local brain or the local
-        path relative to the plone site.
-        """
-        if not obj and not brain and not path:
-            raise ValueError('Provide either obj, brain or path')
-        portal = self.context.portal_url.getPortalObject()
-        controller = IStatisticsCacheController(portal)
-        if obj or brain:
-            if not getattr(self, '_portal_path', None):
-                self._portal_path = '/'.join(portal.getPhysicalPath()) + '/'
-            if obj:
-                fullpath = '/'.join(obj.getPhysicalPath())
-            elif brain:
-                fullpath = brain.getPath()
-            if not fullpath.startswith(self._portal_path):
-                raise Exception('Cannot get remote item: %s does not start with %s' % (
-                        `fullpath`,
-                        `self._portal_path`,
-                        ))
-            path = fullpath[len(self._portal_path):]
-        ro_path = controller.remote_objects_by_path()
-        return ro_path.get(path, None)
 
     def _get_elements(self):
         """ Returns the cached elements. Returns
@@ -178,7 +159,7 @@ class BrokenPublications(BaseStatistic):
 
     def get_elements_for_cache(self, controller):
         for brain in self.context.portal_catalog(self.local_query()):
-            if self.get_remote_item(brain=brain):
+            if controller.get_remote_item(brain=brain):
                 yield {
                     'Title': brain.Title,
                     'path': brain.getPath(),
@@ -226,7 +207,7 @@ class UnpublishedVisibles(BaseStatistic):
 
     def get_elements_for_cache(self, controller):
         for brain in self.context.portal_catalog(self.local_query()):
-            ritem = self.get_remote_item(brain=brain)
+            ritem = controller.get_remote_item(brain=brain)
             if ritem and ritem['review_state'] != brain.review_state:
                 yield {
                     'Title': brain.Title,

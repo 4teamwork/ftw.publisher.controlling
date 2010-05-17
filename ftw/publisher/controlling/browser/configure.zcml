@@ -34,7 +34,6 @@
       name="publisher-controlling-broken-publications"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       class=".views.BrokenPublications"
-      template="element-listing.pt"
       permission="cmf.ManagePortal"
       />
 
@@ -42,7 +41,6 @@
       name="publisher-controlling-unpublished-visibles"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       class=".views.UnpublishedVisibles"
-      template="element-listing.pt"
       permission="cmf.ManagePortal"
       />
 
