@@ -14,7 +14,6 @@ class ListRemoteObjects(BrowserView):
         """
         return [
             'Title',
-            'getPath',
             'review_state',
             'workflow_name',
             'UID',
@@ -23,15 +22,24 @@ class ListRemoteObjects(BrowserView):
             'modified',
             'end',
             'expires',
+            'absolute_url',
             ]
 
     def additional_infos(self, brain, data):
         """ For adding additional, not attribute-based infos to
         the dict
         """
+        path = brain.getPath()
+        if not path.startswith(self.portal_path):
+            raise Exception('path of %s does not start as expected: %s' % (
+                    `brain`,
+                    path
+                    ))
+        data['path'] = path[len(self.portal_path):]
         return data
 
     def __call__(self):
+        self.portal_path = '/'.join(self.context.portal_url.getPortalObject().getPhysicalPath())+'/'
         data = list(self._get_data())
         return simplejson.dumps(data)
 

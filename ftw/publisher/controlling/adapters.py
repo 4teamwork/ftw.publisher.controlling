@@ -101,7 +101,7 @@ class StatisticsCacheController(object):
     def remote_objects_by_path(self):
         """ Returns a dict of remote objects with the path as key
         """
-        return dict([(elm['getPath'], elm) for elm in self.get_remote_objects()])
+        return dict([(elm['path'], elm) for elm in self.get_remote_objects()])
 
     def _list_statistics_views(self):
         """ Returns a generator of views which are statistic views
