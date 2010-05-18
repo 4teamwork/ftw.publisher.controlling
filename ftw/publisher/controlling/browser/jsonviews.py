@@ -15,7 +15,6 @@ class ListRemoteObjects(BrowserView):
         return [
             'Title',
             'review_state',
-            'workflow_name',
             'UID',
             'portal_type',
             'start',
@@ -44,7 +43,10 @@ class ListRemoteObjects(BrowserView):
         return simplejson.dumps(data)
 
     def _get_data(self):
-        for brain in self.context.portal_catalog():
+        for brain in self.context.portal_catalog(path={
+                'query': '/zug.ch/www.zug.ch/organisation',
+                'limit': 0,
+                }):
             yield self._get_brain_data(brain)
 
     def _get_brain_data(self, brain):
