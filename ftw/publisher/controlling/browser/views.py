@@ -161,7 +161,7 @@ class BrokenPublications(BaseStatistic):
         for brain in self.context.portal_catalog(self.local_query()):
             if controller.get_remote_item(brain=brain):
                 yield {
-                    'Title': brain.Title,
+                    'Title': brain.pretty_title_or_id(),
                     'path': brain.getPath(),
                     'review_state': brain.review_state,
                     'workflow_name': brain.workflow_name,
@@ -210,7 +210,7 @@ class UnpublishedVisibles(BaseStatistic):
             ritem = controller.get_remote_item(brain=brain)
             if ritem and ritem['review_state'] != brain.review_state:
                 yield {
-                    'Title': brain.Title,
+                    'Title': brain.pretty_title_or_id(),
                     'path': brain.getPath(),
                     'review_state': brain.review_state,
                     'workflow_name': brain.workflow_name,
