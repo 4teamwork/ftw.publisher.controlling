@@ -44,8 +44,7 @@ class ListRemoteObjects(BrowserView):
 
     def _get_data(self):
         for brain in self.context.portal_catalog(path={
-                'query': '/zug.ch/www.zug.ch/organisation',
-                'limit': 0,
+                'query': '/'.join(self.context.getPhysicalPath()),
                 }):
             yield self._get_brain_data(brain)
 
