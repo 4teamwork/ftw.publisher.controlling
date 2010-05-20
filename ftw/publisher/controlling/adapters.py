@@ -57,7 +57,7 @@ class StatisticsCacheController(object):
         """ Returns a datetime when the last successfull cache
         update happened.
         """
-        return self.realm_annotations[ANNOTATIONS_DATE_KEY]
+        return self.realm_annotations.get(ANNOTATIONS_DATE_KEY, 0)
 
     def get_elements_for(self, view_name, default=None,
                          unpersist_data=True):
