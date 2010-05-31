@@ -76,7 +76,7 @@ msgstr "Zurück zur Publikationsüberwachung"
 #. Default: "Last update: ${date}"
 #: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:58
 msgid "last_refresh"
-msgstr "Zuletzt aktualisiert"
+msgstr "Zuletzt aktualisiert: ${date}"
 
 #. Default: "Refresh Statistics"
 #: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:50
