@@ -22,12 +22,15 @@ class ListRemoteObjects(BrowserView):
             'end',
             'expires',
             'absolute_url',
+            'id',
+            'pretty_title_or_id',
             ]
 
     def additional_infos(self, brain, data):
         """ For adding additional, not attribute-based infos to
         the dict
         """
+        # add the path relative to the site root
         path = brain.getPath()
         if not path.startswith(self.portal_path):
             raise Exception('path of %s does not start as expected: %s' % (
