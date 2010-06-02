@@ -6,6 +6,7 @@ from ftw.publisher.controlling.utils import persistent_aware, unpersist
 from plone.memoize import instance
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
+import os
 import simplejson
 
 try:
@@ -125,6 +126,31 @@ class StatisticsCacheController(object):
                         ))
             path = fullpath[len(self._portal_path):]
         return self.remote_objects_by_path().get(path, None)
+
+    def remote_to_local_path(self, remote_path):
+        """ Convert a remote path to the local path
+        """
+        if not getattr(self, '_portal_path', None):
+            portal = self.context.portal_url.getPortalObject()
+            self._portal_path = '/'.join(portal.getPhysicalPath()) + '/'
+        if remote_path.startswith('/'):
+            remote_path = remote_path[1:]
+        return os.join(self._portal_path, remote_path)
+
+    def get_local_brain(self, remote_path):
+        """ Returns the brain of a remote path or None
+        """
+        query = {
+            'path': {
+                'query': remote_path,
+                'limit': 0,
+                }
+            }
+        brains = self.context.portal_catalog(query)
+        if len(brains)==0:
+            return None
+        else:
+            return brains[0]
 
     def _list_statistics_views(self):
         """ Returns a generator of views which are statistic views

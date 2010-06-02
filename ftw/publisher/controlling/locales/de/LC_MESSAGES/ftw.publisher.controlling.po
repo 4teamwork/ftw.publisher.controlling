@@ -81,7 +81,7 @@ msgstr "Zuletzt aktualisiert: ${date}"
 #. Default: "Refresh Statistics"
 #: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:50
 msgid "legend_refresh_statistics"
-msgstr "Staistiken neu berechnen"
+msgstr "Statistiken neu berechnen"
 
 #. Default: "Select Realm"
 #: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:29
@@ -91,7 +91,7 @@ msgstr "Zielinstanz auswählen"
 #. Default: "Statistics"
 #: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:66
 msgid "legend_statistics"
-msgstr "Staistiken"
+msgstr "Statistiken"
 
 #. Default: "The statistics are cached for fast access. It is will not refresh automatically, so you need to push the button below for refreshing it."
 #: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:51
