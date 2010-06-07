@@ -5,6 +5,9 @@ Changelog
 1.0a1
 -----
 
+* Made statistics adapter more robust
+  [07.06.2010, jbaumann]
+
 * Added translations.
   [17.05.2010, jbaumann]
 

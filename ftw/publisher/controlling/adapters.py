@@ -36,7 +36,7 @@ class StatisticsCacheController(object):
         self.context = context
         self.portal = context.portal_url.getPortalObject()
         self.portal_annotations = IAnnotations(self.portal)
-        self.realm_annotations = IAnnotations(self.get_current_realm())
+        self.realm_annotations = self.get_current_realm() and IAnnotations(self.get_current_realm())
 
     def rebuild_cache(self):
         """ Rebuilds the cache for each statistics view which
@@ -52,12 +52,16 @@ class StatisticsCacheController(object):
         """ The cache version is incremented after every successful
         update of the cache.
         """
+        if not self.realm_annotations:
+            return -1
         return int(self.realm_annotations.get(ANNOTATIONS_VERSION_KEY, 0))
 
     def last_updated(self):
         """ Returns a datetime when the last successfull cache
         update happened.
         """
+        if not self.realm_annotations:
+            return -1
         return self.realm_annotations.get(ANNOTATIONS_DATE_KEY, 0)
 
     def get_elements_for(self, view_name, default=None,
@@ -65,6 +69,8 @@ class StatisticsCacheController(object):
         """ Returns the cached elements for a view (registered
         in portal_actions)
         """
+        if not self.realm_annotations:
+            return ()
         key = ANNOTATIONS_PREFIX + view_name
         data = self.realm_annotations.get(key, default)
         if unpersist_data:
@@ -171,6 +177,8 @@ class StatisticsCacheController(object):
     def _store_elements_for(self, view_name, elements):
         """ Stores a list of elements for a view_name
         """
+        if not self.realm_annotations:
+            return
         key = ANNOTATIONS_PREFIX + view_name
         data = persistent_aware(elements)
         self.realm_annotations[key] = data
@@ -178,6 +186,8 @@ class StatisticsCacheController(object):
     def _increment_cache_version(self):
         """ Increments the cache version
         """
+        if not self.realm_annotations:
+            return
         version = int(self.get_cache_version())
         version += 1
         self.realm_annotations[ANNOTATIONS_VERSION_KEY] = version
@@ -185,5 +195,7 @@ class StatisticsCacheController(object):
     def _set_last_update_date(self):
         """ Sets the "last_updated" information to now
         """
+        if not self.realm_annotations:
+            return
         self.realm_annotations[ANNOTATIONS_DATE_KEY] = datetime.now()
 
