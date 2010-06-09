@@ -21,7 +21,7 @@ class ListRemoteObjects(BrowserView):
             'modified',
             'end',
             'expires',
-            'absolute_url',
+            'getURL',
             'id',
             'pretty_title_or_id',
             ]

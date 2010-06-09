@@ -5,6 +5,9 @@ Changelog
 1.0a1
 -----
 
+* Send getURL, not absolute_url since the latter is alyways the portal_catalog url
+  [09.06.2010, jbaumann]
+
 * Made statistics adapter more robust
   [07.06.2010, jbaumann]
 
