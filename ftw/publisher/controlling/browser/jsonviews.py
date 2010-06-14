@@ -38,6 +38,7 @@ class ListRemoteObjects(BrowserView):
                     path
                     ))
         data['path'] = path[len(self.portal_path):]
+        data['original_path'] = path
         return data
 
     def __call__(self):

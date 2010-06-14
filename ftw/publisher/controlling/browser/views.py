@@ -5,6 +5,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
 from ftw.publisher.controlling import _
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
+from ftw.publisher.sender.interfaces import IPathBlacklist
 from ftw.table.interfaces import ITableGenerator
 from zope.component import getUtility
 import md5
@@ -158,7 +159,10 @@ class BrokenPublications(BaseStatistic):
             return {}
 
     def get_elements_for_cache(self, controller):
+        bl = IPathBlacklist(self.context)
         for brain in self.context.portal_catalog(self.local_query()):
+            if bl.is_blacklisted(brain):
+                continue
             if controller.get_remote_item(brain=brain):
                 yield {
                     'Title': brain.pretty_title_or_id(),
@@ -206,7 +210,10 @@ class UnpublishedVisibles(BaseStatistic):
             return {}
 
     def get_elements_for_cache(self, controller):
+        bl = IPathBlacklist(self.context)
         for brain in self.context.portal_catalog(self.local_query()):
+            if bl.is_blacklisted(brain):
+                continue
             ritem = controller.get_remote_item(brain=brain)
             if ritem and ritem['review_state'] != brain.review_state:
                 yield {

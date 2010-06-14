@@ -1,3 +1,4 @@
+from ftw.publisher.sender.interfaces import IPathBlacklist
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
@@ -100,9 +101,12 @@ class StatisticsCacheController(object):
         """ Returns a list of remote objects (as dicts) with some basic
         information.
         """
-        data = sendRequestToRealm({}, self.get_current_realm(),
-                                  '@@publisher-controlling-json-remote-object')
-        return simplejson.loads(data)
+        jdata = sendRequestToRealm({}, self.get_current_realm(),
+                                   '@@publisher-controlling-json-remote-object')
+        bl = IPathBlacklist(self.context)
+        data = filter(lambda item:bl.is_blacklisted(item.get('original_path')),
+                      simplejson.loads(jdata))
+        return data
 
     @instance.memoize
     def remote_objects_by_path(self):
