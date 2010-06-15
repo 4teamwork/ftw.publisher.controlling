@@ -104,7 +104,7 @@ class StatisticsCacheController(object):
         jdata = sendRequestToRealm({}, self.get_current_realm(),
                                    '@@publisher-controlling-json-remote-object')
         bl = IPathBlacklist(self.context)
-        data = filter(lambda item:bl.is_blacklisted(item.get('original_path')),
+        data = filter(lambda item:not bl.is_blacklisted(item.get('original_path')),
                       simplejson.loads(jdata))
         return data
 
