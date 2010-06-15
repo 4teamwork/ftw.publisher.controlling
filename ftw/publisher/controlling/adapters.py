@@ -104,8 +104,14 @@ class StatisticsCacheController(object):
         jdata = sendRequestToRealm({}, self.get_current_realm(),
                                    '@@publisher-controlling-json-remote-object')
         bl = IPathBlacklist(self.context)
-        data = filter(lambda item:not bl.is_blacklisted(item.get('original_path')),
-                      simplejson.loads(jdata))
+        def _filterer(item):
+            path = self.remote_to_local_path(item.get('path'))
+            if bl.is_blacklisted(path):
+                return False
+            elif bl.is_blacklisted(item.get('original_path')):
+                return False
+            return True
+        data = filter(_filterer, simplejson.loads(jdata))
         return data
 
     @instance.memoize
@@ -145,7 +151,7 @@ class StatisticsCacheController(object):
             self._portal_path = '/'.join(portal.getPhysicalPath()) + '/'
         if remote_path.startswith('/'):
             remote_path = remote_path[1:]
-        return os.join(self._portal_path, remote_path)
+        return os.path.join(self._portal_path, remote_path)
 
     def get_local_brain(self, remote_path):
         """ Returns the brain of a remote path or None
