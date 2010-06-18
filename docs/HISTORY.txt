@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-1.0a1
------
+1.0
+---
 
 * Ignore blacklisted items in controlling views too
   [15.06.2010, jbaumann]
