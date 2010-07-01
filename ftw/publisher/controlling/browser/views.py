@@ -167,7 +167,7 @@ class BrokenPublications(BaseStatistic):
                 yield {
                     'Title': brain.pretty_title_or_id(),
                     'path': brain.getPath(),
-                    'review_state': brain.review_state,
+                    'review_state': self.context.translate(brain.review_state),
                     'workflow_name': brain.workflow_name,
                     'portal_type' : brain.portal_type,
                     }
@@ -219,7 +219,7 @@ class UnpublishedVisibles(BaseStatistic):
                 yield {
                     'Title': brain.pretty_title_or_id(),
                     'path': brain.getPath(),
-                    'review_state': brain.review_state,
+                    'review_state': self.context.translate(brain.review_state),
                     'workflow_name': brain.workflow_name,
                     'portal_type' : brain.portal_type,
                     }
