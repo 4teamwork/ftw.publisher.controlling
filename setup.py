@@ -25,6 +25,7 @@ setup(name='ftw.publisher.controlling',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+        'ftw.publisher.sender',
         'setuptools',
         'ftw.table',
         # -*- Extra requirements: -*-
