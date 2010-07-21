@@ -9,8 +9,8 @@ Changelog
   [01.07.2010, jbaumann]
 
 
-1.0
----
+1.0c1
+-----
 
 * Ignore blacklisted items in controlling views too
   [15.06.2010, jbaumann]
