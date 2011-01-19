@@ -5,7 +5,6 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
 from ftw.publisher.controlling import _
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
-from ftw.publisher.sender.interfaces import IPathBlacklist
 from ftw.table.interfaces import ITableGenerator
 from zope.component import getUtility
 import md5
@@ -17,6 +16,7 @@ except ImportError:
     SENDER_INSTALLED = False
 else:
     SENDER_INSTALLED = True
+    from ftw.publisher.sender.interfaces import IPathBlacklist
 
 
 class ControllingView(BrowserView):

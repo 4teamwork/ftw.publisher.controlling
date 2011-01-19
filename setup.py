@@ -25,10 +25,12 @@ setup(name='ftw.publisher.controlling',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-        'ftw.publisher.sender',
         'setuptools',
         'ftw.table',
         # -*- Extra requirements: -*-
+        ],
+      extras_requires=dict(sender=[
+        'ftw.publisher.sender',
         ],
       entry_points="""
       # -*- Entry points: -*-

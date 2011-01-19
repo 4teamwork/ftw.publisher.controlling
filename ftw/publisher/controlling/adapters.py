@@ -1,4 +1,3 @@
-from ftw.publisher.sender.interfaces import IPathBlacklist
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
@@ -19,6 +18,7 @@ else:
 
 if SENDER_INSTALLED:
     from ftw.publisher.sender.utils import sendRequestToRealm
+    from ftw.publisher.sender.interfaces import IPathBlacklist
 
 
 # annotations key on portal

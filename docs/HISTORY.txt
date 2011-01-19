@@ -5,6 +5,9 @@ Changelog
 1.0c3
 -----
 
+* Made dependency to ftw.publisher.sender optional
+  [jbaumann]
+
 
 1.0c2
 -----
