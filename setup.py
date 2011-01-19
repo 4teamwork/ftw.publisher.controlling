@@ -31,7 +31,7 @@ setup(name='ftw.publisher.controlling',
         ],
       extras_requires=dict(sender=[
         'ftw.publisher.sender',
-        ],
+        ]),
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
