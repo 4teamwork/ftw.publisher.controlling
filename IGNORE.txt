@@ -3,3 +3,4 @@
 ftw.publisher.controlling.egg-info
 build
 dist
+*.mo
