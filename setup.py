@@ -8,7 +8,7 @@ setup(name='ftw.publisher.controlling',
       description='An ftw.publisher addon for statistics on published ' + \
           'objects in a workflow based setup.',
 
-      long_description=open('README.txt').read() + '\n' + \
+      long_description=open('README.rst').read() + '\n' + \
           open(os.path.join('docs', 'HISTORY.txt')).read(),
 
       # Get more strings from
