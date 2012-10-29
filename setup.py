@@ -2,39 +2,47 @@ from setuptools import setup, find_packages
 import os
 
 version = open('ftw/publisher/controlling/version.txt').read().strip()
-maintainer = 'Jonas Baumann'
 
 setup(name='ftw.publisher.controlling',
       version=version,
-      description="Controlling views for workflow bound ftw.publisher usage" + \
-          ' (Maintainer: %s)' % maintainer,
-      long_description=open("README.txt").read() + "\n" + \
-          open(os.path.join("docs", "HISTORY.txt")).read(),
-      # Get more strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      description='An ftw.publisher addon for statistics on published ' + \
+          'objects in a workflow based setup.',
+
+      long_description=open('README.txt').read() + '\n' + \
+          open(os.path.join('docs', 'HISTORY.txt')).read(),
+
+      # Get more strings from
+      # http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
-        "Programming Language :: Python",
+        'Framework :: Plone',
+        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+        'Programming Language :: Python',
+        'Topic :: Software Development :: Libraries :: Python Modules',
         ],
+
       keywords='ftw publisher controlling',
-      author='%s, 4teamwork GmbH' % maintainer,
+      author='4teamwork GmbH',
       author_email='mailto:info@4teamwork.ch',
-      maintainer=maintainer,
-      url='http://psc.4teamwork.ch/4teamwork/ftw/ftw.publisher.controlling/',
+      url='https://github.com/4teamwork/ftw.publisher.controlling',
       license='GPL2',
+
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['ftw', 'ftw.publisher'],
       include_package_data=True,
       zip_safe=False,
+
       install_requires=[
         'setuptools',
         'ftw.table',
-        # -*- Extra requirements: -*-
         ],
+
       extras_requires=dict(sender=[
-        'ftw.publisher.sender',
-        ]),
-      entry_points="""
+            'ftw.publisher.sender',
+            ]),
+
+      entry_points='''
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
       target = plone
-      """,
+      ''',
       )
