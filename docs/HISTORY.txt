@@ -2,40 +2,36 @@ Changelog
 =========
 
 
-1.2
----
+1.2 (unreleased)
+----------------
+
+- Nothing changed yet.
 
 
-1.1
----
+1.1 (2011-01-19)
+----------------
 
-* Made dependency to ftw.publisher.sender optional
-  [jbaumann]
-
-
-1.0c2
------
-
-* Added translations for workflow states
-  [01.07.2010, jbaumann]
+- Made dependency to ftw.publisher.sender optional
+  [jone]
 
 
-1.0c1
------
+1.0 (2010-07-21)
+----------------
 
-* Ignore blacklisted items in controlling views too
-  [15.06.2010, jbaumann]
+- Added translations for workflow states
+  [jone]
 
-* Using new path blacklist for controlling views
-  [14.06.2010, jbaumann]
+- Ignore blacklisted items in controlling views too
+  [jone]
 
-* Send getURL, not absolute_url since the latter is alyways the portal_catalog url
-  [09.06.2010, jbaumann]
+- Using new path blacklist for controlling views
+  [jone]
 
-* Made statistics adapter more robust
-  [07.06.2010, jbaumann]
+- Send getURL, not absolute_url since the latter is alyways the portal_catalog url
+  [jone]
 
-* Added translations.
-  [17.05.2010, jbaumann]
+- Made statistics adapter more robust
+  [jone]
 
-* Initial release
+- Added translations.
+  [jone]
