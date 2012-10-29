@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = open('ftw/publisher/controlling/version.txt').read().strip()
+version = '1.2-dev'
 
 setup(name='ftw.publisher.controlling',
       version=version,
