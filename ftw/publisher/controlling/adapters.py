@@ -5,9 +5,10 @@ from ftw.publisher.controlling.interfaces import IStatisticsCacheController
 from ftw.publisher.controlling.utils import persistent_aware, unpersist
 from plone.memoize import instance
 from zope.annotation.interfaces import IAnnotations
+from zope.app.component.hooks import getSite
 from zope.component import adapts
-import os
 import json
+import os
 
 try:
     from ftw.publisher.sender.interfaces import IConfig
@@ -35,9 +36,6 @@ class StatisticsCacheController(object):
     def __init__(self, context):
         context = aq_inner(context)
         self.context = context
-        self.portal = context.portal_url.getPortalObject()
-        self.portal_annotations = IAnnotations(self.portal)
-        self.realm_annotations = self.get_current_realm() and IAnnotations(self.get_current_realm())
 
     def rebuild_cache(self):
         """ Rebuilds the cache for each statistics view which
@@ -53,27 +51,30 @@ class StatisticsCacheController(object):
         """ The cache version is incremented after every successful
         update of the cache.
         """
-        if not self.realm_annotations:
+        realm_annotations = self._get_realm_annotations()
+        if realm_annotations is None:
             return -1
-        return int(self.realm_annotations.get(ANNOTATIONS_VERSION_KEY, 0))
+        return int(realm_annotations.get(ANNOTATIONS_VERSION_KEY, 0))
 
     def last_updated(self):
         """ Returns a datetime when the last successfull cache
         update happened.
         """
-        if not self.realm_annotations:
+        realm_annotations = self._get_realm_annotations()
+        if realm_annotations is None:
             return -1
-        return self.realm_annotations.get(ANNOTATIONS_DATE_KEY, 0)
+        return realm_annotations.get(ANNOTATIONS_DATE_KEY, 0)
 
     def get_elements_for(self, view_name, default=None,
                          unpersist_data=True):
         """ Returns the cached elements for a view (registered
         in portal_actions)
         """
-        if not self.realm_annotations:
+        realm_annotations = self._get_realm_annotations()
+        if realm_annotations is None:
             return ()
         key = ANNOTATIONS_PREFIX + view_name
-        data = self.realm_annotations.get(key, default)
+        data = realm_annotations.get(key, default)
         if unpersist_data:
             data = unpersist(data)
         return data
@@ -81,11 +82,11 @@ class StatisticsCacheController(object):
     def get_current_realm(self):
         """ Returns the currently select realm object
         """
-        realm = self.portal_annotations.get(ANNOTATIONS_CURRENT_REALM, None)
+        realm = IAnnotations(getSite()).get(ANNOTATIONS_CURRENT_REALM, None)
         if realm:
             return realm
         else:
-            for realm in IConfig(self.portal).getRealms():
+            for realm in IConfig(getSite()).getRealms():
                 if realm.active:
                     self.set_current_realm(realm)
                     return realm
@@ -94,7 +95,7 @@ class StatisticsCacheController(object):
     def set_current_realm(self, realm):
         """ Sets the current realm (realm object)
         """
-        self.portal_annotations[ANNOTATIONS_CURRENT_REALM] = realm
+        IAnnotations(getSite())[ANNOTATIONS_CURRENT_REALM] = realm
 
     @instance.memoize
     def get_remote_objects(self):
@@ -187,24 +188,37 @@ class StatisticsCacheController(object):
     def _store_elements_for(self, view_name, elements):
         """ Stores a list of elements for a view_name
         """
-        if not self.realm_annotations:
+        realm_annotations = self._get_realm_annotations()
+        if realm_annotations is None:
             return
         key = ANNOTATIONS_PREFIX + view_name
         data = persistent_aware(elements)
-        self.realm_annotations[key] = data
+        realm_annotations[key] = data
 
     def _increment_cache_version(self):
         """ Increments the cache version
         """
-        if not self.realm_annotations:
+        realm_annotations = self._get_realm_annotations()
+        if realm_annotations is None:
             return
         version = int(self.get_cache_version())
         version += 1
-        self.realm_annotations[ANNOTATIONS_VERSION_KEY] = version
+        realm_annotations[ANNOTATIONS_VERSION_KEY] = version
 
     def _set_last_update_date(self):
         """ Sets the "last_updated" information to now
         """
-        if not self.realm_annotations:
+        realm_annotations = self._get_realm_annotations()
+        if realm_annotations is None:
             return
-        self.realm_annotations[ANNOTATIONS_DATE_KEY] = datetime.now()
+        realm_annotations[ANNOTATIONS_DATE_KEY] = datetime.now()
+
+    def _get_realm_annotations(self):
+        realm = self.get_current_realm()
+        if realm:
+            return IAnnotations(realm)
+        else:
+            return None
+
+    def _get_portal_annotations(self):
+        return IAnnotations(getSite())
