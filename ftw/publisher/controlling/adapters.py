@@ -1,3 +1,4 @@
+from AccessControl.SecurityInfo import ClassSecurityInformation
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from datetime import datetime
@@ -32,11 +33,13 @@ ANNOTATIONS_DATE_KEY = 'publisher-controlling-last-update'
 
 class StatisticsCacheController(object):
     adapts(IStatisticsCacheController)
+    security = ClassSecurityInformation()
 
     def __init__(self, context):
         context = aq_inner(context)
         self.context = context
 
+    security.declarePrivate('rebuild_cache')
     def rebuild_cache(self):
         """ Rebuilds the cache for each statistics view which
         is registered in portal_actions
@@ -47,6 +50,7 @@ class StatisticsCacheController(object):
         self._increment_cache_version()
         self._set_last_update_date()
 
+    security.declarePrivate('get_cache_version')
     def get_cache_version(self):
         """ The cache version is incremented after every successful
         update of the cache.
@@ -56,6 +60,7 @@ class StatisticsCacheController(object):
             return -1
         return int(realm_annotations.get(ANNOTATIONS_VERSION_KEY, 0))
 
+    security.declarePrivate('last_updated')
     def last_updated(self):
         """ Returns a datetime when the last successfull cache
         update happened.
@@ -65,6 +70,7 @@ class StatisticsCacheController(object):
             return -1
         return realm_annotations.get(ANNOTATIONS_DATE_KEY, 0)
 
+    security.declarePrivate('get_elements_for')
     def get_elements_for(self, view_name, default=None,
                          unpersist_data=True):
         """ Returns the cached elements for a view (registered
@@ -79,6 +85,7 @@ class StatisticsCacheController(object):
             data = unpersist(data)
         return data
 
+    security.declarePrivate('get_current_realm')
     def get_current_realm(self):
         """ Returns the currently select realm object
         """
@@ -92,11 +99,13 @@ class StatisticsCacheController(object):
                     return realm
         return None
 
+    security.declarePrivate('set_current_realm')
     def set_current_realm(self, realm):
         """ Sets the current realm (realm object)
         """
         IAnnotations(getSite())[ANNOTATIONS_CURRENT_REALM] = realm
 
+    security.declarePrivate('get_remote_objects')
     @instance.memoize
     def get_remote_objects(self):
         """ Returns a list of remote objects (as dicts) with some basic
@@ -115,12 +124,14 @@ class StatisticsCacheController(object):
         data = filter(_filterer, json.loads(jdata))
         return data
 
+    security.declarePrivate('remote_objects_by_path')
     @instance.memoize
     def remote_objects_by_path(self):
         """ Returns a dict of remote objects with the path as key
         """
         return dict([(elm['path'], elm) for elm in self.get_remote_objects()])
 
+    security.declarePrivate('get_remote_item')
     def get_remote_item(self, obj=None, brain=None, path=None):
         """ Returns the remote item as dict (if existing) or None.
         Provide either the local obj, the local brain or the local
@@ -144,6 +155,7 @@ class StatisticsCacheController(object):
             path = fullpath[len(self._portal_path):]
         return self.remote_objects_by_path().get(path, None)
 
+    security.declarePrivate('remote_to_local_path')
     def remote_to_local_path(self, remote_path):
         """ Convert a remote path to the local path
         """
@@ -154,6 +166,7 @@ class StatisticsCacheController(object):
             remote_path = remote_path[1:]
         return os.path.join(self._portal_path, remote_path)
 
+    security.declarePrivate('get_local_brain')
     def get_local_brain(self, remote_path):
         """ Returns the brain of a remote path or None
         """
@@ -169,6 +182,7 @@ class StatisticsCacheController(object):
         else:
             return brains[0]
 
+    security.declarePrivate('_list_statistics_views')
     def _list_statistics_views(self):
         """ Returns a generator of views which are statistic views
         """
@@ -185,6 +199,7 @@ class StatisticsCacheController(object):
                 yield self.context.restrictedTraverse(view_name)
 
 
+    security.declarePrivate('_store_elements_for')
     def _store_elements_for(self, view_name, elements):
         """ Stores a list of elements for a view_name
         """
@@ -195,6 +210,7 @@ class StatisticsCacheController(object):
         data = persistent_aware(elements)
         realm_annotations[key] = data
 
+    security.declarePrivate('_increment_cache_version')
     def _increment_cache_version(self):
         """ Increments the cache version
         """
@@ -205,6 +221,7 @@ class StatisticsCacheController(object):
         version += 1
         realm_annotations[ANNOTATIONS_VERSION_KEY] = version
 
+    security.declarePrivate('_set_last_update_date')
     def _set_last_update_date(self):
         """ Sets the "last_updated" information to now
         """
@@ -213,6 +230,7 @@ class StatisticsCacheController(object):
             return
         realm_annotations[ANNOTATIONS_DATE_KEY] = datetime.now()
 
+    security.declarePrivate('_get_realm_annotations')
     def _get_realm_annotations(self):
         realm = self.get_current_realm()
         if realm:
@@ -220,5 +238,6 @@ class StatisticsCacheController(object):
         else:
             return None
 
+    security.declarePrivate('_get_portal_annotations')
     def _get_portal_annotations(self):
         return IAnnotations(getSite())
