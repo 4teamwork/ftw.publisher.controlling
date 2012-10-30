@@ -36,7 +36,7 @@ setup(name='ftw.publisher.controlling',
         'ftw.table',
         ],
 
-      extras_requires={
+      extras_require={
         'sender': ['ftw.publisher.sender'],
         'receiver': ['ftw.publisher.receiver']},
 
