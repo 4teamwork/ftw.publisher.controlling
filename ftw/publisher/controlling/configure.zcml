@@ -5,23 +5,23 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="ftw.publisher.controlling">
 
-  <!-- Include configuration for dependencies listed in setup.py -->
-  <include package="z3c.autoinclude" file="meta.zcml" />
-  <includeDependencies package="." />
+    <!-- Include configuration for dependencies listed in setup.py -->
+    <include package="z3c.autoinclude" file="meta.zcml" />
+    <includeDependencies package="." />
 
-  <i18n:registerTranslations directory="locales" />
+    <i18n:registerTranslations directory="locales" />
 
-  <include package=".browser" />
-  <include file="profiles.zcml" />
+    <include package=".browser" />
+    <include file="profiles.zcml" />
 
-  <adapter
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      provides="ftw.publisher.controlling.interfaces.IStatisticsCacheController"
-      factory="ftw.publisher.controlling.adapters.StatisticsCacheController"
-      name="" />
+    <adapter
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        provides="ftw.publisher.controlling.interfaces.IStatisticsCacheController"
+        factory="ftw.publisher.controlling.adapters.StatisticsCacheController"
+        name="" />
 
-  <adapter
-      factory=".indexer.workflow_name"
-      name="workflow_name" />
+    <adapter
+        factory=".indexer.workflow_name"
+        name="workflow_name" />
 
 </configure>
