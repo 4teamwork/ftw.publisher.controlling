@@ -177,10 +177,10 @@ class BrokenPublications(BaseStatistic):
                  default=u'Broken Publications')
 
     def columns(self):
-        return ('Title',
-                'portal_type',
-                'review_state',
-                'workflow_name',
+        return (_(u'Title'),
+                _(u'portal_type'),
+                _(u'review_state'),
+                _(u'workflow_name'),
                 )
 
     def prepare_elements(self, elements):
@@ -229,10 +229,10 @@ class UnpublishedVisibles(BaseStatistic):
                  default=u'Unpublished visibles')
 
     def columns(self):
-        return ('Title',
-                'portal_type',
-                'review_state',
-                'workflow_name',
+        return (_(u'Title'),
+                _(u'portal_type'),
+                _(u'review_state'),
+                _(u'workflow_name'),
                 )
 
     def prepare_elements(self, elements):

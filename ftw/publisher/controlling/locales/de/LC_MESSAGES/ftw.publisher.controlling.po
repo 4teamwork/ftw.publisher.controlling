@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-05-17 15:41+0000\n"
+"POT-Creation-Date: 2012-10-30 14:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,95 +12,109 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ftw.publisher.controlling/ftw/publisher/controlling/profiles/default/actions.xml
+#: ./ftw/publisher/controlling/profiles/sender/actions.xml
 msgid "Broken publications"
 msgstr "Publikation fehlerhaft"
 
-#: ftw.publisher.controlling/ftw/publisher/controlling/profiles/default/actions.xml
+#: ./ftw/publisher/controlling/profiles/sender/actions.xml
 msgid "Show all objects wich are not published (on the editing system) but are existing on the public system."
 msgstr "Alle objekte, welche auf der Redaktion nicht publiziert wurden, aber trotzdem öffentlich sind."
 
-#: ftw.publisher.controlling/ftw/publisher/controlling/profiles/default/actions.xml
+#: ./ftw/publisher/controlling/profiles/sender/actions.xml
 msgid "Shows all objects wich have a published-state but do not exist at the remote site."
 msgstr "Alle objekte, welche publiziert wurden (Redaktion) aber auf dem öffentlichen System nicht erscheinen."
 
-#: ftw.publisher.controlling/ftw/publisher/controlling/profiles/default/actions.xml
+#: ./ftw/publisher/controlling/browser/views.py:180
+msgid "Title"
+msgstr "Titel"
+
+#: ./ftw/publisher/controlling/profiles/sender/actions.xml
 msgid "Unpublished visibles"
 msgstr "Redaktion fehlerhaft"
 
 #. Default: "Refresh Statistics"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:60
+#: ./ftw/publisher/controlling/browser/controlling.pt:60
 msgid "button_refresh_statistics"
 msgstr "Statistiken neu berechnen"
 
 #. Default: "Publishment Controlling"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:18
+#: ./ftw/publisher/controlling/browser/controlling.pt:18
 msgid "heading_publishment_controlling"
 msgstr "Publikationsüberwachung"
 
 #. Default: "Refreshed statistics successfully."
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/views.py:90
+#: ./ftw/publisher/controlling/browser/views.py:91
 msgid "info_refreshed_statistics"
 msgstr "Die Statistiken wurden neu berechnet."
 
 #. Default: "Realm selected"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/views.py:33
+#: ./ftw/publisher/controlling/browser/views.py:34
 msgid "info_selected_realm"
 msgstr "Zielinstanz auswählen"
 
 #. Default: "Broken Publications"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/views.py:172
+#: ./ftw/publisher/controlling/browser/views.py:176
 msgid "label_broken_publications"
 msgstr "Publikation fehlerhaft"
 
 #. Default: "Select Realm"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:42
+#: ./ftw/publisher/controlling/browser/controlling.pt:42
 msgid "label_select_realm"
 msgstr "Zielinstanz auswählen"
 
 #. Default: "Unpublished visibles"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/views.py:221
+#: ./ftw/publisher/controlling/browser/views.py:228
 msgid "label_unpublished_visibles"
 msgstr "Redaktion fehlerhaft"
 
 #. Default: "Up to Site Setup"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:21
+#: ./ftw/publisher/controlling/browser/controlling.pt:21
 msgid "label_up_to_plone_setup"
 msgstr "Zurück zur Website-Konfiguration"
 
 #. Default: "Up to publishment controlling overview"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/element-listing.pt:21
+#: ./ftw/publisher/controlling/browser/element-listing.pt:21
 msgid "label_up_to_publishment_controlling"
 msgstr "Zurück zur Publikationsüberwachung"
 
 #. Default: "Last update: ${date}"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:58
+#: ./ftw/publisher/controlling/browser/controlling.pt:58
 msgid "last_refresh"
 msgstr "Zuletzt aktualisiert: ${date}"
 
 #. Default: "Refresh Statistics"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:50
+#: ./ftw/publisher/controlling/browser/controlling.pt:50
 msgid "legend_refresh_statistics"
 msgstr "Statistiken neu berechnen"
 
 #. Default: "Select Realm"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:29
+#: ./ftw/publisher/controlling/browser/controlling.pt:29
 msgid "legend_select_realm"
 msgstr "Zielinstanz auswählen"
 
 #. Default: "Statistics"
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:66
+#: ./ftw/publisher/controlling/browser/controlling.pt:66
 msgid "legend_statistics"
 msgstr "Statistiken"
 
+#: ./ftw/publisher/controlling/browser/views.py:181
+msgid "portal_type"
+msgstr "Typ"
+
+#: ./ftw/publisher/controlling/browser/views.py:182
+msgid "review_state"
+msgstr "Status"
+
 #. Default: "The statistics are cached for fast access. It is will not refresh automatically, so you need to push the button below for refreshing it."
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:51
+#: ./ftw/publisher/controlling/browser/controlling.pt:51
 msgid "text_refresh"
 msgstr "Um den Zugriff zu beschleunigen werden die Statistiken zwischengespeichert. Mit Klick auf den Link \"Statistiken neu berechnen\" werden die Statistiken aktualisiert. Es ist möglich, dass während dem Aktualisieren etwas publiziert wird, was zu inkonsistenz führen kann."
 
 #. Default: "Select the realm to perform the statistics on. Every realm has its own statistics cache."
-#: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:30
+#: ./ftw/publisher/controlling/browser/controlling.pt:30
 msgid "text_select_realm"
 msgstr "Wählen Sie die Zielinstanz aus, zu welcher sie die Statistiken anzeigen möchten. Die Statistiken werden pro Zielinstanz einzeln zwischengespeichert."
 
-
+#: ./ftw/publisher/controlling/browser/views.py:183
+msgid "workflow_name"
+msgstr "Workflow"
