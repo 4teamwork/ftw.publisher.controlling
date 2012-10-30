@@ -8,7 +8,7 @@ from ftw.publisher.controlling.interfaces import IStatisticsCacheController
 from ftw.table.interfaces import ITableGenerator
 from zope.component import getUtility
 import md5
-import simplejson
+import json
 
 try:
     from ftw.publisher.sender.interfaces import IConfig
@@ -154,7 +154,7 @@ class BrokenPublications(BaseStatistic):
             return None
         data = props.getProperty('controlling_brokenpublications_query', None)
         if data:
-            return simplejson.loads(data.strip())
+            return json.loads(data.strip())
         else:
             return {}
 
@@ -205,7 +205,7 @@ class UnpublishedVisibles(BaseStatistic):
             return None
         data = props.getProperty('controlling_unpublishedvisibles_query', None)
         if data:
-            return simplejson.loads(data.strip())
+            return json.loads(data.strip())
         else:
             return {}
 
@@ -242,4 +242,3 @@ class UnpublishedVisibles(BaseStatistic):
                 elm['Title'],
                 )
         return elements
-

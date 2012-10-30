@@ -7,7 +7,7 @@ from plone.memoize import instance
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapts
 import os
-import simplejson
+import json
 
 try:
     from ftw.publisher.sender.interfaces import IConfig
@@ -111,7 +111,7 @@ class StatisticsCacheController(object):
             elif bl.is_blacklisted(item.get('original_path')):
                 return False
             return True
-        data = filter(_filterer, simplejson.loads(jdata))
+        data = filter(_filterer, json.loads(jdata))
         return data
 
     @instance.memoize
@@ -208,4 +208,3 @@ class StatisticsCacheController(object):
         if not self.realm_annotations:
             return
         self.realm_annotations[ANNOTATIONS_DATE_KEY] = datetime.now()
-

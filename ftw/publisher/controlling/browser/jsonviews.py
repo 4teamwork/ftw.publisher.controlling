@@ -1,6 +1,6 @@
 from DateTime import DateTime
 from Products.Five import BrowserView
-import simplejson
+import json
 
 
 class ListRemoteObjects(BrowserView):
@@ -44,7 +44,7 @@ class ListRemoteObjects(BrowserView):
     def __call__(self):
         self.portal_path = '/'.join(self.context.portal_url.getPortalObject().getPhysicalPath())+'/'
         data = list(self._get_data())
-        return simplejson.dumps(data)
+        return json.dumps(data)
 
     def _get_data(self):
         for brain in self.context.portal_catalog(path={
