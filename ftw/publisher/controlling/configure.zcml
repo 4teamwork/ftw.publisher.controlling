@@ -20,4 +20,8 @@
       factory="ftw.publisher.controlling.adapters.StatisticsCacheController"
       name="" />
 
+  <adapter
+      factory=".indexer.workflow_name"
+      name="workflow_name" />
+
 </configure>
