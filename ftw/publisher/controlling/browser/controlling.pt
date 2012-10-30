@@ -65,9 +65,7 @@
         <fieldset>
           <legend i18n:translate="legend_statistics">Statistics</legend>
 
-          <dl class="actionItems"
-              id="content-views"
-              i18n:domain="plone">
+          <dl class="actionItems" i18n:domain="plone">
 
             <tal:views repeat="action view/get_actions">
               <dt tal:attributes="id string:action/id">
