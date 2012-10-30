@@ -2,15 +2,33 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+      xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="ftw.publisher.controlling">
 
-  <!-- Register the installation GenericSetup extension profile -->
-  <genericsetup:registerProfile
-      name="default"
-      title="ftw.publisher.controlling"
-      directory="profiles/default"
-      description=""
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
+    <genericsetup:registerProfile
+        name="default"
+        title="ftw.publisher.controlling (base profile)"
+        directory="profiles/default"
+        description=""
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <genericsetup:registerProfile
+        zcml:condition="not-installed ftw.publisher.receiver"
+        name="sender"
+        title="ftw.publisher.controlling: sender"
+        directory="profiles/sender"
+        description=""
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <genericsetup:registerProfile
+        zcml:condition="installed ftw.publisher.receiver"
+        name="receiver"
+        title="ftw.publisher.controlling: receiver"
+        directory="profiles/receiver"
+        description=""
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
 
 </configure>

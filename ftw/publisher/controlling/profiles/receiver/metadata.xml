@@ -3,7 +3,7 @@
     <version>1200</version>
 
     <dependencies>
-        <dependency>profile-ftw.table:default</dependency>
+        <dependency>profile-ftw.publisher.controlling:default</dependency>
     </dependencies>
 
 </metadata>

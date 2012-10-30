@@ -36,9 +36,9 @@ setup(name='ftw.publisher.controlling',
         'ftw.table',
         ],
 
-      extras_requires=dict(sender=[
-            'ftw.publisher.sender',
-            ]),
+      extras_requires={
+        'sender': ['ftw.publisher.sender'],
+        'receiver': ['ftw.publisher.receiver']},
 
       entry_points='''
       # -*- Entry points: -*-
