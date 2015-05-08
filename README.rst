@@ -29,8 +29,8 @@ Links
 
 - github project repository: https://github.com/4teamwork/ftw.publisher.controlling
 - Main publisher github project repository: https://github.com/4teamwork/ftw.publisher.sender
-- Issue tracker: https://github.com/4teamwork/ftw.publisher.controlling/issues
-- Package on pypi: http://pypi.python.org/pypi/ftw.publisher.controlling
+- Issues: https://github.com/4teamwork/ftw.publisher.controlling/issues
+- Pypi: http://pypi.python.org/pypi/ftw.publisher.controlling
 - Continuous integration: https://jenkins.4teamwork.ch/search?q=ftw.publisher.controlling
 
 
