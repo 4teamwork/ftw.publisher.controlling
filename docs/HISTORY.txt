@@ -5,6 +5,8 @@ Changelog
 1.2 (unreleased)
 ----------------
 
+- Translates names of workflow and states. [mbaechtold]
+
 - Enable filling the cache for the first time. [mbaechtold]
 
 - Fix filling the cache. [mbaechtold]

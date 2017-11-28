@@ -7,6 +7,7 @@ from ftw.publisher.controlling import _
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
 from ftw.table.interfaces import ITableGenerator
 from zope.component import getUtility
+from zope.i18n import translate
 import md5
 import simplejson
 
@@ -139,6 +140,22 @@ class BaseStatistic(BrowserView):
         generator = getUtility(ITableGenerator, 'ftw.tablegenerator')
         return generator.generate(elements, self.columns())
 
+    def translate_workflow_state(self, workflow_id, state_id):
+        wftool = getToolByName(self.context, 'portal_workflow')
+        workflow = wftool.get(workflow_id)
+        state = workflow.states.get(state_id)
+        if state:
+            return translate(state.title.decode('utf-8'),
+                             domain='plone',
+                             context=self.request).encode('utf-8')
+        return state_id
+
+    def translate_workflow_name(self, workflow_id):
+        wftool = getToolByName(self.context, 'portal_workflow')
+        workflow = wftool.get(workflow_id)
+        return translate(workflow.title.decode('utf-8'),
+                         domain='plone',
+                         context=self.request).encode('utf-8')
 
 
 class BrokenPublications(BaseStatistic):
@@ -167,8 +184,8 @@ class BrokenPublications(BaseStatistic):
                 yield {
                     'Title': brain.pretty_title_or_id(),
                     'path': brain.getPath(),
-                    'review_state': self.context.translate(brain.review_state),
-                    'workflow_name': brain.workflow_id,
+                    'review_state': self.translate_workflow_state(brain.workflow_id, brain.review_state),
+                    'workflow_name': self.translate_workflow_name(brain.workflow_id),
                     'portal_type' : brain.portal_type,
                     }
 
@@ -219,8 +236,8 @@ class UnpublishedVisibles(BaseStatistic):
                 yield {
                     'Title': brain.pretty_title_or_id(),
                     'path': brain.getPath(),
-                    'review_state': self.context.translate(brain.review_state),
-                    'workflow_name': brain.workflow_id,
+                    'review_state': self.translate_workflow_state(brain.workflow_id, brain.review_state),
+                    'workflow_name': self.translate_workflow_name(brain.workflow_id),
                     'portal_type' : brain.portal_type,
                     }
 
