@@ -5,11 +5,12 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.statusmessages.interfaces import IStatusMessage
 from ftw.publisher.controlling import _
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
+from ftw.publisher.sender.workflows import interfaces
 from ftw.table.interfaces import ITableGenerator
+from zope.component import getAdapters
 from zope.component import getUtility
 from zope.i18n import translate
 import md5
-import simplejson
 
 try:
     from ftw.publisher.sender.interfaces import IConfig
@@ -161,17 +162,26 @@ class BaseStatistic(BrowserView):
 class BrokenPublications(BaseStatistic):
     """ Show a list of all objects which are:
     - existing on the editing system
-    - in a published state (see configuration in portal_properties)
+    - in a published state
     - not existing on the public system
     """
 
     def local_query(self):
-        props = self.context.portal_properties.get('publisher_properties', None)
-        if not props:
-            return None
-        data = props.getProperty('controlling_brokenpublications_query', None)
-        if data:
-            return simplejson.loads(data.strip())
+        workflow_config_mappings = getAdapters(
+            (self.request,),
+            interfaces.IWorkflowConfiguration,
+        )
+        unpublished_states = []
+        for workflow_config_mapping in workflow_config_mappings:
+            workflow_config = workflow_config_mapping[1]
+            for title, kind in workflow_config.lawgiver_states().items():
+                if kind not in interfaces.PUBLISHED_STATES:
+                    unpublished_states.append(
+                        workflow_config._status_id(title)
+                    )
+
+        if unpublished_states:
+            return {'review_state': unpublished_states}
         else:
             return {}
 
@@ -215,14 +225,22 @@ class UnpublishedVisibles(BaseStatistic):
     - existing on the public system
     """
 
-
     def local_query(self):
-        props = self.context.portal_properties.get('publisher_properties', None)
-        if not props:
-            return None
-        data = props.getProperty('controlling_unpublishedvisibles_query', None)
-        if data:
-            return simplejson.loads(data.strip())
+        workflow_config_mappings = getAdapters(
+            (self.request,),
+            interfaces.IWorkflowConfiguration,
+        )
+        published_states = []
+        for workflow_config_mapping in workflow_config_mappings:
+            workflow_config = workflow_config_mapping[1]
+            for title, kind in workflow_config.lawgiver_states().items():
+                if kind in interfaces.PUBLISHED_STATES:
+                    published_states.append(
+                        workflow_config._status_id(title)
+                    )
+
+        if published_states:
+            return {'review_state': published_states}
         else:
             return {}
 

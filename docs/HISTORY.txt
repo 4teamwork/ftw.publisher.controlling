@@ -5,6 +5,9 @@ Changelog
 1.2 (unreleased)
 ----------------
 
+- Use the workflow config to determine the published and unpublished
+  states. [mbaechtold]
+
 - Translates names of workflow and states. [mbaechtold]
 
 - Enable filling the cache for the first time. [mbaechtold]
