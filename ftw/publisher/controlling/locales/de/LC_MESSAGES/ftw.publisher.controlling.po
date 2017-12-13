@@ -18,11 +18,11 @@ msgstr "Publikation fehlerhaft"
 
 #: ftw.publisher.controlling/ftw/publisher/controlling/profiles/default/actions.xml
 msgid "Show all objects wich are not published (on the editing system) but are existing on the public system."
-msgstr "Alle objekte, welche auf der Redaktion nicht publiziert wurden, aber trotzdem öffentlich sind."
+msgstr "Alle Objekte, welche auf der Redaktion nicht publiziert wurden, aber trotzdem öffentlich sind."
 
 #: ftw.publisher.controlling/ftw/publisher/controlling/profiles/default/actions.xml
 msgid "Shows all objects wich have a published-state but do not exist at the remote site."
-msgstr "Alle objekte, welche publiziert wurden (Redaktion) aber auf dem öffentlichen System nicht erscheinen."
+msgstr "Alle Objekte, welche publiziert wurden (Redaktion), aber auf dem öffentlichen System nicht erscheinen."
 
 #: ftw.publisher.controlling/ftw/publisher/controlling/profiles/default/actions.xml
 msgid "Unpublished visibles"
@@ -96,11 +96,11 @@ msgstr "Statistiken"
 #. Default: "The statistics are cached for fast access. It is will not refresh automatically, so you need to push the button below for refreshing it."
 #: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:51
 msgid "text_refresh"
-msgstr "Um den Zugriff zu beschleunigen werden die Statistiken zwischengespeichert. Mit Klick auf den Link \"Statistiken neu berechnen\" werden die Statistiken aktualisiert. Es ist möglich, dass während dem Aktualisieren etwas publiziert wird, was zu inkonsistenz führen kann."
+msgstr "Um den Zugriff zu beschleunigen, werden die Statistiken zwischengespeichert. Mit Klick auf den Link \"Statistiken neu berechnen\" werden die Statistiken aktualisiert. Es ist möglich, dass während dem Aktualisieren etwas publiziert wird, was zu Inkonsistenz führen kann."
 
 #. Default: "Select the realm to perform the statistics on. Every realm has its own statistics cache."
 #: ftw.publisher.controlling/ftw/publisher/controlling/browser/controlling.pt:30
 msgid "text_select_realm"
-msgstr "Wählen Sie die Zielinstanz aus, zu welcher sie die Statistiken anzeigen möchten. Die Statistiken werden pro Zielinstanz einzeln zwischengespeichert."
+msgstr "Wählen Sie die Zielinstanz aus, zu welcher Sie die Statistiken anzeigen möchten. Die Statistiken werden pro Zielinstanz einzeln zwischengespeichert."
 
 
