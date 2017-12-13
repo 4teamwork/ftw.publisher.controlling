@@ -24,6 +24,7 @@ class ListRemoteObjects(BrowserView):
             'getURL',
             'id',
             'pretty_title_or_id',
+            'workflow_id',
             ]
 
     def additional_infos(self, brain, data):

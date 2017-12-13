@@ -44,4 +44,11 @@
       permission="cmf.ManagePortal"
       />
 
+  <browser:page
+      name="publisher-controlling-non-existing-visibles"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".views.NonExistingVisibles"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>

@@ -278,3 +278,49 @@ class UnpublishedVisibles(BaseStatistic):
                 )
         return elements
 
+
+class NonExistingVisibles(BaseStatistic):
+    """
+    Show a list of objects wich are:
+    - existing on the public system
+    - but not existing on the editing system
+    """
+
+    def local_query(self):
+        return {}
+
+    def get_elements_for_cache(self, controller):
+        """
+        Get all remote objects and return those which
+        do not existing locally.
+        """
+        remote_objects = controller.get_remote_objects()
+        for item in remote_objects:
+            local_path = controller.remote_to_local_path(item['path'])
+            if not controller.get_local_brain(local_path):
+                yield {
+                    'Title': item['pretty_title_or_id'],
+                    'path': item['getURL'],
+                    'review_state': self.translate_workflow_state(item['workflow_id'], item['review_state']),
+                    'workflow_name': self.translate_workflow_name(item['workflow_id']),
+                    'portal_type': item['portal_type'],
+                }
+
+    def get_title(self):
+        return _(u'label_non_existing_visibles',
+                 default=u'Non-existing visibles')
+
+    def columns(self):
+        return ('Title',
+                'portal_type',
+                'review_state',
+                'workflow_name',
+                )
+
+    def prepare_elements(self, elements):
+        for elm in elements:
+            elm['Title'] = '<a href="%s">%s</a>' % (
+                elm['path'],
+                elm['Title'],
+                )
+        return elements

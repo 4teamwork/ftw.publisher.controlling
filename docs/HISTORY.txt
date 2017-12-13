@@ -5,6 +5,9 @@ Changelog
 1.2 (unreleased)
 ----------------
 
+- Add a new statistics view which lists objects existing on the remote
+  system (receiver) but not on the local system (sender). [mbaechtold]
+
 - Use the workflow config to determine the published and unpublished
   states. [mbaechtold]
 
