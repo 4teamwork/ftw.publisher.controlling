@@ -3,6 +3,8 @@ import os
 
 version = '1.2-dev'
 
+tests_require = []
+
 setup(name='ftw.publisher.controlling',
       version=version,
       description='An ftw.publisher addon for statistics on published ' + \
@@ -36,9 +38,13 @@ setup(name='ftw.publisher.controlling',
         'ftw.table',
         ],
 
-      extras_requires=dict(sender=[
+      tests_require=tests_require,
+      extras_require={
+        'tests': tests_require,
+        'sender': [
             'ftw.publisher.sender > 2.2.0',
-            ]),
+        ],
+      },
 
       entry_points='''
       # -*- Entry points: -*-
