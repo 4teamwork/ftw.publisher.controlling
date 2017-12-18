@@ -1,0 +1,47 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="ftw.publisher.controlling">
+
+  <browser:resourceDirectory
+      name="ftw.publisher.controlling"
+      directory="resources"
+      />
+
+  <browser:page
+      name="publisher-controlling"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".views.ControllingView"
+      template="controlling.pt"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      name="publisher-controlling-refresh-statistics"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".views.RefreshStatistics"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      name="publisher-controlling-broken-publications"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".views.BrokenPublications"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      name="publisher-controlling-unpublished-visibles"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".views.UnpublishedVisibles"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      name="publisher-controlling-non-existing-visibles"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class=".views.NonExistingVisibles"
+      permission="cmf.ManagePortal"
+      />
+
+</configure>
