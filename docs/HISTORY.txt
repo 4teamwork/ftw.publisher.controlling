@@ -5,7 +5,17 @@ Changelog
 1.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Add a new statistics view which lists objects existing on the remote
+  system (receiver) but not on the local system (sender). [mbaechtold]
+
+- Use the workflow config to determine the published and unpublished
+  states. [mbaechtold]
+
+- Translates names of workflow and states. [mbaechtold]
+
+- Enable filling the cache for the first time. [mbaechtold]
+
+- Fix filling the cache. [mbaechtold]
 
 
 1.1 (2011-01-19)

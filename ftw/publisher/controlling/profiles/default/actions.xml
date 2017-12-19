@@ -29,6 +29,18 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="non-existing-visibles" meta_type="CMF Action" i18n:domain="ftw.publisher.controlling">
+      <property name="title" i18n:translate="">Non-existing visibles</property>
+      <property name="description"
+                i18n:translate="">Show all objects existing on the public system but not on the editing system.</property>
+      <property name="url_expr">string:$portal_url/@@publisher-controlling-non-existing-visibles</property>
+      <property name="available_expr"></property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
 </object>
