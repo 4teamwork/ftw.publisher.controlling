@@ -21,12 +21,33 @@ if SENDER_INSTALLED:
     from ftw.publisher.sender.interfaces import IPathBlacklist
 
 
-# annotations key on portal
-ANNOTATIONS_CURRENT_REALM = 'publisher-controlling-current-realm'
-# annotations key on realm
-ANNOTATIONS_PREFIX = 'publisher-controlling-statistic-'
-ANNOTATIONS_VERSION_KEY = 'publisher-controlling-version'
-ANNOTATIONS_DATE_KEY = 'publisher-controlling-last-update'
+"""
+portal[ANNOTATIONS_KEY_CACHE] is a persistent mapping with the following structure:
+
+{
+    <realm-1-url>: {
+        ANNOTATIONS_KEY_DATA: {
+            ANNOTATIONS_KEY_CACHE_PREFIX + '<viewname1>': <data>,
+            ANNOTATIONS_KEY_CACHE_PREFIX + '<viewname2>': <data>,
+            ...,
+        },
+        ANNOTATIONS_KEY_CACHE_VERSION: <number>,
+        ANNOTATIONS_KEY_LAST_UPDATE: <timestamp>,
+    },
+    <realm-2-url>: {
+        ...
+    },
+    ....
+}
+"""
+ANNOTATIONS_KEY_CACHE = 'ftw.publisher.controlling-cache'
+ANNOTATIONS_KEY_DATA = 'data'
+ANNOTATIONS_KEY_CACHE_PREFIX = 'statistic-'
+ANNOTATIONS_KEY_CACHE_VERSION = 'version'
+ANNOTATIONS_KEY_LAST_UPDATE = 'last-update'
+
+# portal[ANNOTATIONS_KEY_CURRENT_REALM] contains the current realm object.
+ANNOTATIONS_KEY_CURRENT_REALM = 'ftw.publisher.controlling-current-realm'
 
 
 class StatisticsCacheController(object):
@@ -39,7 +60,7 @@ class StatisticsCacheController(object):
         self.portal_annotations = IAnnotations(self.portal)
         self.current_realm = self.get_current_realm()
         if self.current_realm:
-            self.realm_annotations = IAnnotations(self.current_realm)
+            self.current_realm_cache = self._get_cache_for_realm(self.current_realm)
 
     def rebuild_cache(self):
         """ Rebuilds the cache for each statistics view which
@@ -57,7 +78,7 @@ class StatisticsCacheController(object):
         """
         if not self.current_realm:
             return -1
-        return int(self.realm_annotations.get(ANNOTATIONS_VERSION_KEY, 0))
+        return self.current_realm_cache[ANNOTATIONS_KEY_CACHE_VERSION]
 
     def last_updated(self):
         """ Returns a datetime when the last successfull cache
@@ -65,7 +86,7 @@ class StatisticsCacheController(object):
         """
         if not self.current_realm:
             return -1
-        return self.realm_annotations.get(ANNOTATIONS_DATE_KEY, 0)
+        return self.current_realm_cache[ANNOTATIONS_KEY_LAST_UPDATE]
 
     def get_elements_for(self, view_name, default=None,
                          unpersist_data=True):
@@ -74,8 +95,8 @@ class StatisticsCacheController(object):
         """
         if not self.current_realm:
             return ()
-        key = ANNOTATIONS_PREFIX + view_name
-        data = self.realm_annotations.get(key, default)
+        key = ANNOTATIONS_KEY_CACHE_PREFIX + view_name
+        data = self.current_realm_cache[ANNOTATIONS_KEY_DATA].get(key, default)
         if unpersist_data:
             data = unpersist(data)
         return data
@@ -83,7 +104,7 @@ class StatisticsCacheController(object):
     def get_current_realm(self):
         """ Returns the currently select realm object
         """
-        realm = self.portal_annotations.get(ANNOTATIONS_CURRENT_REALM, None)
+        realm = self.portal_annotations.get(ANNOTATIONS_KEY_CURRENT_REALM, None)
         if realm:
             return realm
         else:
@@ -96,7 +117,7 @@ class StatisticsCacheController(object):
     def set_current_realm(self, realm):
         """ Sets the current realm (realm object)
         """
-        self.portal_annotations[ANNOTATIONS_CURRENT_REALM] = realm
+        self.portal_annotations[ANNOTATIONS_KEY_CURRENT_REALM] = realm
 
     @instance.memoize
     def get_remote_objects(self):
@@ -185,29 +206,43 @@ class StatisticsCacheController(object):
                 view_name = url.split('/')[-1]
                 yield self.context.restrictedTraverse(view_name)
 
-
     def _store_elements_for(self, view_name, elements):
         """ Stores a list of elements for a view_name
         """
         if not self.current_realm:
             return
-        key = ANNOTATIONS_PREFIX + view_name
+        key = ANNOTATIONS_KEY_CACHE_PREFIX + view_name
         data = persistent_aware(elements)
-        self.realm_annotations[key] = data
+        self.current_realm_cache[ANNOTATIONS_KEY_DATA][key] = data
 
     def _increment_cache_version(self):
         """ Increments the cache version
         """
         if not self.current_realm:
             return
-        version = int(self.get_cache_version())
-        version += 1
-        self.realm_annotations[ANNOTATIONS_VERSION_KEY] = version
+        version = self.get_cache_version() + 1
+        self.current_realm_cache[ANNOTATIONS_KEY_CACHE_VERSION] = version
 
     def _set_last_update_date(self):
         """ Sets the "last_updated" information to now
         """
         if not self.current_realm:
             return
-        self.realm_annotations[ANNOTATIONS_DATE_KEY] = datetime.now()
+        self.current_realm_cache[ANNOTATIONS_KEY_LAST_UPDATE] = datetime.now()
 
+    def _get_cache(self):
+        cache = self.portal_annotations.get(ANNOTATIONS_KEY_CACHE, None)
+        if not cache:
+            cache = self.portal_annotations[ANNOTATIONS_KEY_CACHE] = persistent_aware({})
+        return cache
+
+    def _get_cache_for_realm(self, realm):
+        cache = self._get_cache()
+        realm_cache = cache.get(self.current_realm.url, None)
+        if not realm_cache:
+            realm_cache = cache[self.current_realm.url] = persistent_aware({
+                ANNOTATIONS_KEY_DATA: {},
+                ANNOTATIONS_KEY_CACHE_VERSION: 0,
+                ANNOTATIONS_KEY_LAST_UPDATE: 0,
+            })
+        return realm_cache
