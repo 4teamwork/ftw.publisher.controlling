@@ -1,5 +1,6 @@
 from DateTime import DateTime
 from Products.Five import BrowserView
+from datetime import datetime
 import simplejson
 
 
@@ -64,6 +65,8 @@ class ListRemoteObjects(BrowserView):
                     value = value()
                 except TypeError:
                     pass
+            if isinstance(value, datetime):
+                value = DateTime(value)
             if isinstance(value, DateTime):
                 value = value.ISO8601()
             data[name] = value
