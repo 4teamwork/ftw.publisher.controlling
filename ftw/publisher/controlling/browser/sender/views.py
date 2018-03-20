@@ -144,6 +144,8 @@ class BaseStatistic(BrowserView):
     def translate_workflow_state(self, workflow_id, state_id):
         wftool = getToolByName(self.context, 'portal_workflow')
         workflow = wftool.get(workflow_id)
+        if not workflow:
+            return state_id
         state = workflow.states.get(state_id)
         if state:
             return translate(state.title.decode('utf-8'),
@@ -154,6 +156,8 @@ class BaseStatistic(BrowserView):
     def translate_workflow_name(self, workflow_id):
         wftool = getToolByName(self.context, 'portal_workflow')
         workflow = wftool.get(workflow_id)
+        if not workflow:
+            return workflow_id
         return translate(workflow.title.decode('utf-8'),
                          domain='plone',
                          context=self.request).encode('utf-8')

@@ -5,6 +5,8 @@ Changelog
 1.2 (unreleased)
 ----------------
 
+- Store cache on portal instead of the realm. [mbaechtold]
+
 - Add a new statistics view which lists objects existing on the remote
   system (receiver) but not on the local system (sender). [mbaechtold]
 
