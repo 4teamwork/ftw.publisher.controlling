@@ -57,8 +57,13 @@
             Last update:
             <span i18n:name="date" tal:replace="view/last_updated" />
           </p>
-          <a href="./@@publisher-controlling-refresh-statistics" id="refresh_statistics"
-             i18n:translate="button_refresh_statistics">Refresh Statistics</a>
+          <form action="@@publisher-controlling-refresh-statistics" method="POST">
+            <button id="refresh_statistics"
+                    i18n:translate="button_refresh_statistics">
+            Refresh Statistics
+            </button>
+            <span tal:replace="structure context/@@authenticator/authenticator"/>
+          </form>
         </fieldset>
         <br />
 

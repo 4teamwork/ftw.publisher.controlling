@@ -7,6 +7,9 @@ from ftw.publisher.controlling import _
 from ftw.publisher.controlling.interfaces import IStatisticsCacheController
 from ftw.publisher.sender.workflows import interfaces
 from ftw.table.interfaces import ITableGenerator
+from plone.protect import CheckAuthenticator
+from plone.protect import PostOnly
+from plone.protect import protect
 from zope.component import getAdapters
 from zope.component import getUtility
 from zope.i18n import translate
@@ -86,7 +89,9 @@ class ControllingView(BrowserView):
 
 class RefreshStatistics(BrowserView):
 
-    def __call__(self):
+    @protect(PostOnly)
+    @protect(CheckAuthenticator)
+    def __call__(self, REQUEST=None):
         portal = self.context.portal_url.getPortalObject()
         controller = IStatisticsCacheController(portal)
         controller.rebuild_cache()
