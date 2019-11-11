@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-1.3 (unreleased)
-----------------
+1.3.0 (2019-11-11)
+------------------
 
 - Add plone 5.1 compatibility [Nachtalb]
 
